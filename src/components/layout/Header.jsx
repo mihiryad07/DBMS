@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Menu, Bell, User, Sun, Moon, LogOut, Check, X, AlertCircle, CheckCircle, Info } from 'lucide-react';
+import { Menu, Bell, User, Sun, Moon, LogOut, Check, X, AlertCircle, CheckCircle, Info, Globe, ChevronDown } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNotifications } from '../../contexts/NotificationContext';
+import { useTranslation } from 'react-i18next';
 
 const Header = ({ onMenuClick }) => {
   const { user, logout } = useAuth();
   const { notifications, unreadCount, markAsRead, markAllAsRead, removeNotification } = useNotifications();
+  const { t, i18n } = useTranslation();
   const [isDark, setIsDark] = useState(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('theme');
@@ -17,8 +19,10 @@ const Header = ({ onMenuClick }) => {
 
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [isLanguageOpen, setIsLanguageOpen] = useState(false);
   const profileRef = useRef(null);
   const notificationsRef = useRef(null);
+  const languageRef = useRef(null);
 
   useEffect(() => {
     const root = window.document.documentElement;
@@ -31,6 +35,23 @@ const Header = ({ onMenuClick }) => {
     }
   }, [isDark]);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setIsProfileOpen(false);
+      }
+      if (notificationsRef.current && !notificationsRef.current.contains(event.target)) {
+        setIsNotificationsOpen(false);
+      }
+      if (languageRef.current && !languageRef.current.contains(event.target)) {
+        setIsLanguageOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   const formatTimeAgo = (timestamp) => {
     const now = new Date();
     const diff = now - timestamp;
@@ -38,10 +59,10 @@ const Header = ({ onMenuClick }) => {
     const hours = Math.floor(diff / (1000 * 60 * 60));
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-    if (minutes < 1) return 'Just now';
-    if (minutes < 60) return `${minutes}m ago`;
-    if (hours < 24) return `${hours}h ago`;
-    return `${days}d ago`;
+    if (minutes < 1) return t('justNow');
+    if (minutes < 60) return t('minutesAgo', { minutes });
+    if (hours < 24) return t('hoursAgo', { hours });
+    return t('daysAgo', { days });
   };
 
   return (
@@ -55,7 +76,7 @@ const Header = ({ onMenuClick }) => {
         </button>
         <div className="hidden sm:block">
           <h2 className="text-lg font-semibold text-foreground tracking-tight flex items-center gap-2">
-            Operations Panel <span className="flex h-2 w-2 relative"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-60"></span><span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span></span>
+            {t('operationsPanel')} <span className="flex h-2 w-2 relative"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-60"></span><span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span></span>
           </h2>
         </div>
       </div>
@@ -64,10 +85,87 @@ const Header = ({ onMenuClick }) => {
         <button 
           onClick={() => setIsDark(!isDark)}
           className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted/40 rounded-lg transition-colors"
-          title="Toggle Theme"
+          title={t('toggleTheme')}
         >
           {isDark ? <Sun size={18} /> : <Moon size={18} />}
         </button>
+
+        <div className="relative" ref={languageRef}>
+          <button
+            onClick={() => {
+              setIsLanguageOpen(!isLanguageOpen);
+              setIsNotificationsOpen(false);
+              setIsProfileOpen(false);
+            }}
+            className="flex items-center gap-1 p-2 text-muted-foreground hover:text-foreground hover:bg-muted/40 rounded-lg transition-colors"
+            title={t('selectLanguage')}
+          >
+            <Globe size={18} />
+            <ChevronDown size={14} className={`transition-transform ${isLanguageOpen ? 'rotate-180' : ''}`} />
+          </button>
+
+          {isLanguageOpen && (
+            <div className="absolute right-0 mt-2 w-40 rounded-lg bg-card border border-border shadow-lg overflow-hidden z-50">
+              <div className="p-1">
+                <button
+                  onClick={() => {
+                    i18n.changeLanguage('en');
+                    setIsLanguageOpen(false);
+                  }}
+                  className={`w-full text-left px-3 py-2 text-sm rounded-md transition-colors ${
+                    i18n.language === 'en' ? 'bg-accent text-accent-foreground' : 'hover:bg-muted/20'
+                  }`}
+                >
+                  English
+                </button>
+                <button
+                  onClick={() => {
+                    i18n.changeLanguage('es');
+                    setIsLanguageOpen(false);
+                  }}
+                  className={`w-full text-left px-3 py-2 text-sm rounded-md transition-colors ${
+                    i18n.language === 'es' ? 'bg-accent text-accent-foreground' : 'hover:bg-muted/20'
+                  }`}
+                >
+                  {t('spanish')}
+                </button>
+                <button
+                  onClick={() => {
+                    i18n.changeLanguage('fr');
+                    setIsLanguageOpen(false);
+                  }}
+                  className={`w-full text-left px-3 py-2 text-sm rounded-md transition-colors ${
+                    i18n.language === 'fr' ? 'bg-accent text-accent-foreground' : 'hover:bg-muted/20'
+                  }`}
+                >
+                  {t('french')}
+                </button>
+                <button
+                  onClick={() => {
+                    i18n.changeLanguage('nl');
+                    setIsLanguageOpen(false);
+                  }}
+                  className={`w-full text-left px-3 py-2 text-sm rounded-md transition-colors ${
+                    i18n.language === 'nl' ? 'bg-accent text-accent-foreground' : 'hover:bg-muted/20'
+                  }`}
+                >
+                  {t('dutch')}
+                </button>
+                <button
+                  onClick={() => {
+                    i18n.changeLanguage('hi');
+                    setIsLanguageOpen(false);
+                  }}
+                  className={`w-full text-left px-3 py-2 text-sm rounded-md transition-colors ${
+                    i18n.language === 'hi' ? 'bg-accent text-accent-foreground' : 'hover:bg-muted/20'
+                  }`}
+                >
+                  {t('hindi')}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
 
         <div className="relative" ref={notificationsRef}>
           <button
@@ -76,7 +174,7 @@ const Header = ({ onMenuClick }) => {
               setIsProfileOpen(false);
             }}
             className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted/40 rounded-lg transition-colors relative"
-            title="Notifications"
+            title={t('notifications')}
           >
             <Bell size={18} />
             {unreadCount > 0 && (
@@ -90,13 +188,13 @@ const Header = ({ onMenuClick }) => {
           {isNotificationsOpen && (
             <div className="absolute right-0 mt-2 w-80 rounded-lg bg-card border border-border shadow-lg overflow-hidden z-50 max-h-96 overflow-y-auto">
               <div className="px-4 py-3 border-b border-border/50 bg-muted/30 flex items-center justify-between">
-                <h3 className="text-sm font-semibold">Notifications</h3>
+                <h3 className="text-sm font-semibold">{t('notifications')}</h3>
                 {unreadCount > 0 && (
                   <button
                     onClick={markAllAsRead}
                     className="text-xs text-primary hover:text-primary/80 font-medium"
                   >
-                    Mark all read
+                    {t('markAllRead')}
                   </button>
                 )}
               </div>
@@ -104,7 +202,7 @@ const Header = ({ onMenuClick }) => {
                 {notifications.length === 0 ? (
                   <div className="px-4 py-8 text-center text-muted-foreground">
                     <Bell size={24} className="mx-auto mb-2 opacity-40" />
-                    <p className="text-sm">No notifications yet</p>
+                    <p className="text-sm">{t('noNotifications')}</p>
                   </div>
                 ) : (
                   notifications.map((notification) => (
@@ -147,7 +245,7 @@ const Header = ({ onMenuClick }) => {
                                 className="text-xs text-primary hover:text-primary/80 font-medium flex items-center gap-1"
                               >
                                 <Check size={12} />
-                                Mark read
+                                {t('markRead')}
                               </button>
                             )}
                           </div>
@@ -195,7 +293,7 @@ const Header = ({ onMenuClick }) => {
                   className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-destructive hover:bg-destructive/10 transition-colors"
                 >
                   <LogOut size={16} />
-                  <span>Log out</span>
+                  <span>{t('logOut')}</span>
                 </button>
               </div>
             </div>

@@ -6,6 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { Loader, ErrorState } from '../components/ui/Loader';
 import { Modal } from '../components/ui/Modal';
 import { Filter, UserPlus, Trash2, ChevronDown } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const Employees = () => {
   const [filter, setFilter] = useState('All');
@@ -23,6 +24,8 @@ const Employees = () => {
     department: '',
     phone: ''
   });
+  
+  const { t } = useTranslation();
   
   // Close filter dropdown when clicking outside
   useEffect(() => {
@@ -95,8 +98,8 @@ const Employees = () => {
     <div className="space-y-6 lg:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Employee Directory</h2>
-          <p className="text-muted-foreground mt-1 text-sm">Manage staff and manager assignments.</p>
+          <h2 className="text-2xl font-bold tracking-tight">{t('employeeDirectory')}</h2>
+          <p className="text-muted-foreground mt-1 text-sm">{t('manageStaff')}</p>
         </div>
         
         <div className="flex flex-wrap items-center gap-3">
@@ -104,7 +107,7 @@ const Employees = () => {
             <button
               onClick={() => setIsFilterOpen(!isFilterOpen)}
               className="flex items-center gap-2 bg-card p-1.5 rounded-lg border border-border shadow-sm hover:bg-muted/40 transition-colors"
-              title="Filter employees"
+              title={t('filterEmployees')}
             >
               <Filter size={16} className="text-muted-foreground" />
               <span className="text-sm font-medium text-foreground">{filter}</span>
@@ -115,7 +118,7 @@ const Employees = () => {
             {isFilterOpen && (
               <div className="absolute top-full mt-2 w-48 bg-card border border-border rounded-lg shadow-lg z-50 animate-in fade-in slide-in-from-top-2">
                 <div className="p-2">
-                  <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-2">Filter by Role</div>
+                  <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-2">{t('filterByRole')}</div>
                   <div className="space-y-1">
                     <button
                       onClick={() => {
@@ -128,7 +131,7 @@ const Employees = () => {
                           : 'text-foreground hover:bg-muted/60'
                       }`}
                     >
-                      All Employees ({data?.length || 0})
+                      {t('allEmployees', { count: data?.length || 0 })}
                     </button>
                     <button
                       onClick={() => {
@@ -141,7 +144,7 @@ const Employees = () => {
                           : 'text-foreground hover:bg-muted/60'
                       }`}
                     >
-                      Managers ({data?.filter(e => e.type === 'Manager').length || 0})
+                      {t('managers', { count: data?.filter(e => e.type === 'Manager').length || 0 })}
                     </button>
                     <button
                       onClick={() => {
@@ -154,7 +157,7 @@ const Employees = () => {
                           : 'text-foreground hover:bg-muted/60'
                       }`}
                     >
-                      Workers ({data?.filter(e => e.type === 'Worker').length || 0})
+                      {t('workers', { count: data?.filter(e => e.type === 'Worker').length || 0 })}
                     </button>
                   </div>
                 </div>
@@ -167,30 +170,30 @@ const Employees = () => {
             className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-full font-medium shadow hover:bg-primary/90 transition-colors"
           >
             <UserPlus size={18} />
-            <span>Add Employee</span>
+            <span>{t('addEmployee')}</span>
           </button>
         </div>
       </div>
 
       {loading ? (
-        <Loader message="Loading employee data..." />
+        <Loader message={t('loadingEmployeeData')} />
       ) : error ? (
         <ErrorState error={error} onRetry={refetch} />
       ) : (
         <Card>
           <CardHeader>
-            <CardTitle>Employees ({data?.length || 0})</CardTitle>
+            <CardTitle>{t('employeesCount', { count: data?.length || 0 })}</CardTitle>
           </CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Employee No</TableHead>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Role</TableHead>
-                  <TableHead>Department</TableHead>
-                  <TableHead>Phone</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead>{t('employeeNo')}</TableHead>
+                  <TableHead>{t('name')}</TableHead>
+                  <TableHead>{t('role')}</TableHead>
+                  <TableHead>{t('department')}</TableHead>
+                  <TableHead>{t('phone')}</TableHead>
+                  <TableHead className="text-right">{t('actions')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -213,7 +216,7 @@ const Employees = () => {
                       <button 
                         onClick={() => handleDeleteEmployee(emp.employee_no)}
                         className="p-1.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive rounded-md transition-colors"
-                        title="Delete Employee"
+                        title={t('deleteEmployee')}
                       >
                         <Trash2 size={16} />
                       </button>
@@ -222,7 +225,7 @@ const Employees = () => {
                 )) : (
                   <TableRow>
                     <TableCell colSpan={6} className="text-center py-6 text-muted-foreground">
-                      No employees found for the selected filter.
+                      {t('noEmployeesFound')}
                     </TableCell>
                   </TableRow>
                 )}
@@ -236,7 +239,7 @@ const Employees = () => {
       <Modal 
         isOpen={isModalOpen} 
         onClose={() => !isSubmitting && setIsModalOpen(false)}
-        title="Add New Employee"
+        title={t('addNewEmployee')}
       >
         <form onSubmit={handleAddEmployee} className="space-y-4">
           {formError && (
@@ -247,7 +250,7 @@ const Employees = () => {
           
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label className="text-sm font-medium">Employee No.</label>
+              <label className="text-sm font-medium">{t('employeeNoLabel')}</label>
               <input 
                 required 
                 name="employee_no" 
@@ -259,7 +262,7 @@ const Employees = () => {
             </div>
             
             <div className="space-y-1.5">
-              <label className="text-sm font-medium">Full Name</label>
+              <label className="text-sm font-medium">{t('fullName')}</label>
               <input 
                 required 
                 name="name" 
@@ -273,20 +276,20 @@ const Employees = () => {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label className="text-sm font-medium">Role</label>
+              <label className="text-sm font-medium">{t('role')}</label>
               <select
                 name="type"
                 value={formData.type}
                 onChange={handleInputChange}
                 className="w-full flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
-                <option value="Worker">Worker</option>
-                <option value="Manager">Manager</option>
+                <option value="Worker">{t('worker')}</option>
+                <option value="Manager">{t('manager')}</option>
               </select>
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-sm font-medium">Department</label>
+              <label className="text-sm font-medium">{t('department')}</label>
               <input 
                 required 
                 name="department" 
@@ -299,7 +302,7 @@ const Employees = () => {
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-sm font-medium">Phone Number</label>
+              <label className="text-sm font-medium">{t('phoneNumber')}</label>
             <input 
               required 
               name="phone" 
@@ -317,14 +320,14 @@ const Employees = () => {
               disabled={isSubmitting}
               className="px-4 py-2 font-medium rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground"
             >
-              Cancel
+              {t('cancel')}
             </button>
             <button 
               type="submit" 
               disabled={isSubmitting}
               className="px-4 py-2 font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
             >
-              {isSubmitting ? 'Saving...' : 'Save Employee'}
+              {isSubmitting ? t('saving') : t('saveEmployee')}
             </button>
           </div>
         </form>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { Loader2, Lock, User, LayoutDashboard, AlertCircle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -8,6 +9,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const { login } = useAuth();
+  const { t } = useTranslation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,9 +43,9 @@ const Login = () => {
           
           <div className="text-center mb-10">
             <h1 className="text-3xl font-extrabold tracking-tight mb-2">
-              Welcome Back
+              {t('welcomeBack')}
             </h1>
-            <p className="text-muted-foreground">Sign in to your Operations Panel</p>
+            <p className="text-muted-foreground">{t('signInToOperations')}</p>
           </div>
 
           {error && (
@@ -56,7 +58,7 @@ const Login = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
               <label className="text-sm font-semibold tracking-wide text-foreground/80 lowercase select-none">
-                Username
+                {t('username')}
               </label>
               <div className="relative group">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground group-focus-within:text-accent transition-colors">
@@ -75,7 +77,7 @@ const Login = () => {
 
             <div className="space-y-2">
               <label className="text-sm font-semibold tracking-wide text-foreground/80 lowercase select-none">
-                Password
+                {t('password')}
               </label>
               <div className="relative group">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted-foreground group-focus-within:text-accent transition-colors">
@@ -100,17 +102,17 @@ const Login = () => {
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
                   <Loader2 size={18} className="animate-spin" />
-                  Authenticating...
+                  {t('authenticating')}
                 </span>
               ) : (
-                <span className="flex items-center justify-center">Sign In &rarr;</span>
+                <span className="flex items-center justify-center">{t('signIn')}</span>
               )}
             </button>
           </form>
           
           <div className="mt-8 text-center">
             <p className="text-xs text-muted-foreground/70">
-              Demo Credentials: admin / password
+              {t('demoCredentials')}
             </p>
           </div>
         </div>

@@ -3,23 +3,25 @@ import { NavLink } from 'react-router-dom';
 import { LayoutDashboard, Users, Component, PackageSearch, ActivitySquare, Database, Sprout, BarChart3 } from 'lucide-react';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { useTranslation } from 'react-i18next';
 
 // Helper for conditional tailwind classes
 function cn(...inputs) {
   return twMerge(clsx(inputs));
 }
 
-const navItems = [
-  { name: 'Dashboard', path: '/', icon: LayoutDashboard },
-  { name: 'Employees', path: '/employees', icon: Users },
-  { name: 'Warehouses', path: '/warehouses', icon: Component },
-  { name: 'Parts', path: '/parts', icon: PackageSearch },
-  { name: 'Backorders', path: '/backorders', icon: ActivitySquare },
-  { name: 'Queries', path: '/queries', icon: Database },
-  { name: 'Analysis', path: '/analysis', icon: BarChart3 },
-];
-
 const Sidebar = ({ onClose }) => {
+  const { t } = useTranslation();
+
+  const navItems = [
+    { name: t('dashboard'), path: '/', icon: LayoutDashboard },
+    { name: t('employees'), path: '/employees', icon: Users },
+    { name: t('warehouses'), path: '/warehouses', icon: Component },
+    { name: t('parts'), path: '/parts', icon: PackageSearch },
+    { name: t('backorders'), path: '/backorders', icon: ActivitySquare },
+    { name: t('queries'), path: '/queries', icon: Database },
+    { name: t('analysis'), path: '/analysis', icon: BarChart3 },
+  ];
   return (
     <div className="flex flex-col h-full py-6 bg-gradient-to-b from-background via-background to-background">
       <div className="px-6 mb-10 flex items-center gap-3">
@@ -31,7 +33,7 @@ const Sidebar = ({ onClose }) => {
       
       <div className="px-4 flex-1">
         <div className="space-y-1.5">
-          <p className="px-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">Main Menu</p>
+          <p className="px-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-4">{t('mainMenu')}</p>
           {navItems.map((item, index) => (
             <NavLink
               key={item.name}
@@ -57,8 +59,8 @@ const Sidebar = ({ onClose }) => {
       
       <div className="px-4 mt-auto">
         <div className="p-4 bg-gradient-to-br from-primary/8 to-secondary/8 rounded-lg border border-border/50 shadow-sm">
-          <div className="text-xs font-semibold text-foreground mb-1">Wachsen System</div>
-          <p className="text-xs text-muted-foreground leading-relaxed">Warehouse Management & Operations Dashboard</p>
+          <div className="text-xs font-semibold text-foreground mb-1">{t('wachsenSystem')}</div>
+          <p className="text-xs text-muted-foreground leading-relaxed">{t('warehouseManagement')}</p>
         </div>
       </div>
     </div>
