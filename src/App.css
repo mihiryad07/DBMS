@@ -1,0 +1,123 @@
+/* Typography & Text Styling */
+h1 {
+  @apply text-3xl font-bold tracking-tight text-foreground;
+  letter-spacing: -0.5px;
+}
+
+h2 {
+  @apply text-2xl font-semibold tracking-tight text-foreground;
+  letter-spacing: -0.25px;
+}
+
+h3 {
+  @apply text-lg font-semibold text-foreground;
+}
+
+p {
+  @apply text-base leading-relaxed text-foreground/90;
+}
+
+/* Interactive Elements */
+button, a {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:disabled {
+  @apply opacity-50 cursor-not-allowed;
+}
+
+/* Focus States - Accessible & Beautiful */
+:focus-visible {
+  @apply outline-2 outline-offset-2;
+  outline-color: hsl(var(--ring));
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-background;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-muted rounded-full;
+  transition: background-color 0.25s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted-foreground/60;
+}
+
+/* Smooth transitions for theme switching */
+* {
+  @apply transition-colors;
+}
+
+button, a {
+  transition: all 0.25s ease;
+}
+
+/* Utility Classes for Human Design */
+.soft-shadow {
+  @apply shadow-soft;
+}
+
+.warm-shadow {
+  @apply shadow-warm;
+}
+
+.text-accent-glow {
+  @apply text-accent;
+  text-shadow: 0 0 12px rgba(255, 102, 51, 0.1);
+}
+
+/* Hover Effects */
+.interactive-hover {
+  @apply hover:bg-opacity-80 hover:shadow-md;
+}
+
+/* Loading & Animation States */
+@keyframes gentle-pulse {
+  0%, 100% {
+    @apply opacity-100;
+  }
+  50% {
+    @apply opacity-60;
+  }
+}
+
+.gentle-pulse {
+  animation: gentle-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Fade In */
+@keyframes fade-in {
+  from {
+    @apply opacity-0;
+  }
+  to {
+    @apply opacity-100;
+  }
+}
+
+.fade-in {
+  animation: fade-in 0.4s ease-in-out;
+}
+
+/* Slide Up */
+@keyframes slide-up {
+  from {
+    @apply opacity-0 translate-y-2;
+  }
+  to {
+    @apply opacity-100 translate-y-0;
+  }
+}
+
+.slide-up {
+  animation: slide-up 0.3s ease-out;
+}
+

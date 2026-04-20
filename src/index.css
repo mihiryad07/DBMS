@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Light mode - warm, natural palette */
+    --background: 45 40% 97%;
+    --foreground: 220 13% 16%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 13% 16%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 13% 16%;
+
+    --primary: 39 89% 56%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 203 54% 59%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 220 14% 88%;
+    --muted-foreground: 220 8% 45%;
+
+    --accent: 11 86% 63%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 93%;
+    --ring: 39 89% 56%;
+
+    --radius: 0.625rem;
+  }
+
+  .dark {
+    /* Dark mode - warm, sophisticated palette */
+    --background: 218 14% 11%;
+    --foreground: 45 20% 92%;
+
+    --card: 219 17% 16%;
+    --card-foreground: 45 20% 92%;
+
+    --popover: 219 17% 16%;
+    --popover-foreground: 45 20% 92%;
+
+    --primary: 39 82% 52%;
+    --primary-foreground: 220 13% 16%;
+
+    --secondary: 203 58% 54%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 219 17% 32%;
+    --muted-foreground: 45 15% 62%;
+
+    --accent: 11 88% 62%;
+    --accent-foreground: 220 13% 16%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 219 17% 24%;
+    --input: 219 17% 22%;
+    --ring: 39 82% 52%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    background-image: 
+      radial-gradient(at 15% 8%, hsla(39, 89%, 56%, 0.04) 0, transparent 40%),
+      radial-gradient(at 85% 20%, hsla(203, 54%, 59%, 0.03) 0, transparent 45%),
+      radial-gradient(at 50% 95%, hsla(11, 86%, 63%, 0.02) 0, transparent 50%);
+    background-attachment: fixed;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .dark body {
+    background-image: 
+      radial-gradient(at 15% 8%, hsla(39, 82%, 52%, 0.08) 0, transparent 40%),
+      radial-gradient(at 85% 20%, hsla(203, 58%, 54%, 0.06) 0, transparent 45%),
+      radial-gradient(at 50% 95%, hsla(11, 88%, 62%, 0.04) 0, transparent 50%);
+  }
+}
